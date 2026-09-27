@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cape Wars keepsakes</title>
+<meta name="description" content="Trophies for the Tideholm season DAO: one sat a share on the Cape Wars sidechain, with a note the chain keeps.">
+<meta property="og:site_name" content="play-grounds">
+<meta property="og:title" content="Cape Wars keepsakes">
+<meta property="og:description" content="A trophy for every holder of a Tideholm season DAO: one sat a share on the Cape Wars sidechain, with a note the chain keeps.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://play-grounds.github.io/capewars/">
+<style>
+:root {
+  --bg:#f6f4ee; --panel:#ffffff; --panel2:#f0ede4; --line:#e3ddcf; --text:#1d2230; --mut:#6b6f7c; --ac:#1f5fbf;
+  --gold1:#f7d774; --gold2:#c9971c; --silver1:#eef1f5; --silver2:#9aa3b2; --bronze1:#f0b98a; --bronze2:#a8612b; --sea1:#bfe0f0; --sea2:#3a86a8;
+  --good:#1b8a5a; --warn:#a86b00; --mono:ui-monospace,Menlo,Consolas,monospace; --shadow:0 1px 2px rgba(30,30,50,.06),0 8px 24px rgba(30,30,50,.06);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#0f1218; --panel:#171b24; --panel2:#1f2430; --line:#2a3140; --text:#eef1f7; --mut:#9aa1b2; --ac:#7fb0ff; --good:#4ad49a; --warn:#f5b84f; --shadow:none;
+} }
+* { box-sizing:border-box }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 -apple-system,"Segoe UI",Inter,Roboto,sans-serif; padding:1.4rem 1rem 3rem }
+a { color:var(--ac) }
+.wrap { max-width:880px; margin:0 auto }
+header { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:.4rem }
+h1 { margin:0; font-size:1.55rem; letter-spacing:-.01em } h1 small { display:block; color:var(--mut); font-size:.92rem; font-weight:400; letter-spacing:0 }
+.about { color:var(--mut); font-size:.93rem; margin:.4rem 0 1.4rem; max-width:62ch }
+.controls { display:flex; gap:.5rem; flex-wrap:wrap } .controls select, .btn { font:inherit; border-radius:999px; border:1px solid var(--line); background:var(--panel); color:var(--text); padding:.45rem .95rem; cursor:pointer }
+.btn.primary { background:var(--ac); border-color:var(--ac); color:#fff; font-weight:600 }
+.status { font-size:.85rem; color:var(--mut); margin:.2rem 0 1rem; min-height:1.3em }
+.trophy { background:var(--panel); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:1.6rem; display:grid; grid-template-columns:220px 1fr; gap:1.6rem; align-items:center; margin-bottom:1.6rem }
+.trophy svg { width:100%; height:auto; display:block }
+.trophy h2 { margin:0 0 .2rem; font-size:1.4rem } .trophy .who { color:var(--mut); font-size:.9rem; font-family:var(--mono); word-break:break-all }
+.facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:.6rem; margin:1rem 0 } .fact { background:var(--panel2); border-radius:14px; padding:.6rem .8rem } .fact .k { color:var(--mut); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase } .fact .v { font-size:1.25rem; font-weight:700 }
+.pill { display:inline-flex; align-items:center; gap:.4rem; border-radius:999px; padding:.25rem .75rem; font-size:.85rem; font-weight:600 } .pill.minted { background:rgba(27,138,90,.12); color:var(--good) } .pill.reserved { background:rgba(168,107,0,.12); color:var(--warn) }
+.proof { font-size:.85rem; color:var(--mut); margin-top:.8rem } .proof code { font-family:var(--mono); font-size:.8rem }
+h3 { font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mut); margin:0 0 .7rem }
+.hall { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:.8rem }
+.mini { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:1rem; text-align:center; cursor:pointer; text-decoration:none; color:inherit; transition:transform .15s } .mini:hover { transform:translateY(-2px) } .mini.on { border-color:var(--ac) }
+.mini svg { width:96px; height:auto } .mini b { display:block; margin-top:.3rem } .mini span { color:var(--mut); font-size:.85rem }
+.foot { color:var(--mut); font-size:.82rem; margin-top:2rem }
+@media (max-width:620px) { .trophy { grid-template-columns:1fr; text-align:center } .trophy svg { max-width:200px; margin:0 auto } }
+@media (prefers-reduced-motion: reduce) { .mini { transition:none } }
+</style>
+</head>
+<body><div class="wrap">
+<header>
+  <h1>Cape Wars keepsakes <small>a trophy for every holder of a Tideholm season DAO</small></h1>
+  <div class="controls">
+    <select id="season" aria-label="Season"></select>
+    <button class="btn" id="mine">Show mine</button>
+  </div>
+</header>
+<p class="about">When a season ends, every holder of its DAO receives <b>one sat a share</b> on the Cape Wars sidechain, in a transaction that carries its own note. This page reads the book from Tideholm and the keepsake from the chain itself: nothing here is curated. The coins are test coins with no value; the season's prize is separate.</p>
+<div class="status" id="status" role="status" aria-live="polite">Reading the book…</div>
+<div id="trophy"></div>
+<h3 id="hallTitle">The hall</h3>
+<div class="hall" id="hall"></div>
+<p class="foot">The book: <a id="bookLink" href="#">Tideholm DAO</a> · the chain: <a id="chainLink" href="#">sidestr:capewars-s6</a> · the plan: <a href="https://github.com/melvincarvalho/tideholm/issues/193">tideholm#193</a> · <a href="https://github.com/play-grounds/capewars">source</a></p>
+</div>
+<script type="module">
+import { SEASONS, loadBook, openChain, keepsakeOf, ordinal, pubOf, txUrl, addressUrl, noteText } from './keepsake.mjs';
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const num = (n) => Number(n).toLocaleString('en-US');
+const params = new URLSearchParams(location.search);
+const seasons = Object.keys(SEASONS).map(Number).sort((a, b) => b - a);
+let season = seasons.includes(Number(params.get('season'))) ? Number(params.get('season')) : seasons[0];
+let book = null, chain = null, chainState = 'reading', selected = pubOf(params.get('did'));
+
+for (const s of seasons) $('season').insertAdjacentHTML('beforeend', `<option value="${s}">Season ${s}</option>`);
+$('season').value = season;
+
+// The medal: a disc in the holder's metal, the season in the middle, a ribbon behind.
+function medal(h, big) {
+  const m = { gold: ['--gold1', '--gold2'], silver: ['--silver1', '--silver2'], bronze: ['--bronze1', '--bronze2'], sea: ['--sea1', '--sea2'] }[h.medal];
+  const id = `g${h.rank}${big ? 'b' : 's'}`;
+  return `<svg viewBox="0 0 200 240" role="img" aria-label="${esc(h.medal)} medal, season ${season}, ${ordinal(h.rank)}">
+    <defs><radialGradient id="${id}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="var(${m[0]})"/><stop offset="1" stop-color="var(${m[1]})"/></radialGradient></defs>
+    <path d="M62 0h32l22 70H84z" fill="#1f5fbf"/><path d="M138 0h-32L84 70h32z" fill="#c23b3b"/>
+    <circle cx="100" cy="148" r="84" fill="url(#${id})" stroke="var(${m[1]})" stroke-width="4"/>
+    <circle cx="100" cy="148" r="68" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-dasharray="3 5"/>
+    <text x="100" y="138" text-anchor="middle" font-size="18" font-weight="600" fill="rgba(20,20,30,.72)" font-family="Georgia,serif">SEASON</text>
+    <text x="100" y="186" text-anchor="middle" font-size="52" font-weight="700" fill="rgba(20,20,30,.85)" font-family="Georgia,serif">${season}</text>
+  </svg>`;
+}
+
+function trophy(h) {
+  const k = h.keepsake;
+  const minted = k?.txid;
+  const pct = book.supply ? (100 * h.shares / book.supply).toFixed(2) : '?';
+  const pill = minted
+    ? `<span class="pill minted">${k.verified ? '✓ Minted on Cape Wars, book and chain agree' : 'Minted on Cape Wars, but it differs from the book'}</span>`
+    : `<span class="pill reserved">Reserved · mints when season ${season} ends</span>`;
+  const proof = minted
+    ? `Paid <b>${num(k.sats)} sats</b> in block ${k.height}, note “${esc(k.note.text)}”${k.fromTreasury ? ', from the season treasury' : ''}. <a href="${txUrl(SEASONS[season].chain, k.txid)}" target="_blank" rel="noopener">The certificate ↗</a>`
+    : chainState === 'open'
+      ? `Nothing on the chain for this holder yet. It will arrive at <a href="${addressUrl(SEASONS[season].chain, k?.address ?? '')}" target="_blank" rel="noopener"><code>${esc(k?.address ?? '')}</code></a> with the note “${esc(noteText(season, h.shares))}”.`
+      : chainState === 'failed' ? 'The chain could not be read just now, so this shows the book alone.' : 'Reading the chain…';
+  return `<div class="trophy">${medal(h, true)}<div>
+    <h2>${esc(h.name)}, ${ordinal(h.rank)} of ${book.holders.length}</h2>
+    <div class="who">${esc(h.key)}</div>
+    <div class="facts">
+      <div class="fact"><div class="k">shares</div><div class="v">${num(h.shares)}</div></div>
+      <div class="fact"><div class="k">of the DAO</div><div class="v">${pct}%</div></div>
+      <div class="fact"><div class="k">keepsake</div><div class="v">${num(h.shares)} sats</div></div>
+    </div>
+    ${pill}<div class="proof">${proof}</div></div></div>`;
+}
+
+function render() {
+  $('bookLink').href = SEASONS[season].book;
+  $('chainLink').href = `https://sidestr.com/explorer/?chain=${encodeURIComponent(SEASONS[season].chain)}`;
+  $('chainLink').textContent = SEASONS[season].chain;
+  if (!book) return;
+  const h = book.holders.find((x) => x.pub === selected) ?? book.holders[0];
+  selected = h?.pub ?? null;
+  $('trophy').innerHTML = h ? trophy(h) : '<p class="about">No holders this season.</p>';
+  $('hallTitle').textContent = `The hall · season ${season} · ${book.holders.length} holder${book.holders.length === 1 ? '' : 's'} · ${num(book.sold)} of ${num(book.supply)} shares`;
+  $('hall').innerHTML = book.holders.map((x) => `<a class="mini${x.pub === selected ? ' on' : ''}" href="?season=${season}&did=${encodeURIComponent(x.key)}" data-pub="${x.pub}">${medal(x, false)}<b>${esc(x.name)}</b><span>${num(x.shares)} shares${x.keepsake?.txid ? ' · minted' : ''}</span></a>`).join('');
+}
+
+$('hall').addEventListener('click', (e) => {
+  const a = e.target.closest('a.mini'); if (!a) return;
+  e.preventDefault(); selected = a.dataset.pub;
+  history.replaceState(null, '', a.href); render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+$('season').addEventListener('change', () => { season = Number($('season').value); book = null; selected = null; history.replaceState(null, '', `?season=${season}`); load(); });
+$('mine').addEventListener('click', async () => {
+  if (!window.nostr?.getPublicKey) { $('status').textContent = 'No nostr extension found. Pick your trophy from the hall, or add ?did=did:nostr:<your key> to the address.'; return; }
+  try {
+    const pub = (await window.nostr.getPublicKey()).toLowerCase();
+    if (!book?.holders.some((x) => x.pub === pub)) { $('status').textContent = `That key held no shares in season ${season}.`; return; }
+    selected = pub; history.replaceState(null, '', `?season=${season}&did=did:nostr:${pub}`); render();
+  } catch (e) { $('status').textContent = `The extension declined: ${e.message}`; }
+});
+
+async function load() {
+  render();
+  $('status').textContent = 'Reading the book…';
+  try { book = await loadBook(season); } catch (e) { $('status').textContent = `The book could not be read: ${e.message}`; return; }
+  chainState = 'reading'; render();
+  try {
+    chain = await openChain(season, (msg) => { $('status').textContent = `Cape Wars: ${msg}…`; });
+    for (const h of book.holders) h.keepsake = h.pub ? keepsakeOf(chain, season, h) : null;
+    chainState = 'open';
+    const minted = book.holders.filter((h) => h.keepsake?.txid).length;
+    $('status').textContent = `Book and chain read · ${minted} of ${book.holders.length} keepsakes minted · chain height ${chain.ex.tip()?.height ?? '?'}`;
+  } catch (e) { chainState = 'failed'; $('status').textContent = `The chain could not be read (${e.message}); showing the book alone.`; }
+  render();
+}
+load();
+</script>
+</body>
+</html>
